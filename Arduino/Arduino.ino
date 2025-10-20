@@ -11,7 +11,7 @@
 
 // --- LED SETUP ---
 const int ledPin = 13;       // LED connected to digital pin 13
-const float motionThreshold = 1.0;  // Motion sensitivity threshold (adjustable)
+const float motionThreshold = 3.0;  // Motion sensitivity threshold (adjustable)
 
 // --- MPU6050 SETUP ---
 MPU6050 mpu;
