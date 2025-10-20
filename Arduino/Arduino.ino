@@ -10,14 +10,19 @@
 #include "MPU6050_6Axis_MotionApps20.h"
 
 // --- LED SETUP ---
-const int ledPin = 13;              // LED connected to digital pin 13
-const float motionThreshold = 1.0;  // Motion sensitivity threshold (adjustable)
+const int ledPin = 13;  // LED connected to digital pin 13
+const float motionThreshold = 1.0;
+
+bool blink = true;
+bool blink2 = true;
+bool blink3 = true;
+// Motion sensitivity threshold (adjustable)
 // --- LED SETUP ---
 const int ledPin2 = 12;              // LED connected to digital pin 12
-const float motionThreshold2 = 2.0;  // Motion sensitivity threshold (adjustable)
+const float motionThreshold2 = 3.0;  // Motion sensitivity threshold (adjustable)
 // --- LED SETUP ---
 const int ledPin3 = 11;              // LED connected to digital pin 11
-const float motionThreshold3 = 3.0;  // Motion sensitivity threshold (adjustable)
+const float motionThreshold3 = 5.0;  // Motion sensitivity threshold (adjustable)
 
 // --- MPU6050 SETUP ---
 MPU6050 mpu;
@@ -78,10 +83,12 @@ void setup() {
 
   // LED pin setup
   pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, LOW);
+  pinMode(ledPin2, OUTPUT);
+  pinMode(ledPin3, OUTPUT);
 }
 
 void loop() {
+
   if (!DMPReady) return;
 
   if (mpu.dmpGetCurrentFIFOPacket(FIFOBuffer)) {
@@ -107,22 +114,35 @@ void loop() {
     // --- MOTION DETECTION ---
     // If any axis exceeds threshold, turn LED on
     if (abs(ax) > motionThreshold || abs(ay) > motionThreshold || abs(az) > motionThreshold) {
-      digitalWrite(ledPin, HIGH);  // Motion detected
+      blink = false;  // digitalWrite(ledPin, HIGH);  // Motion detected
     }
     // --- MOTION DETECTION ---
     // If any axis exceeds threshold, turn LED on
     if (abs(ax) > motionThreshold2 || abs(ay) > motionThreshold2 || abs(az) > motionThreshold2) {
-      digitalWrite(ledPin2, HIGH);  // Motion detected
+     blink2 = false;  // digitalWrite(ledPin2, HIGH);  // Motion detected
     }
-        // --- MOTION DETECTION ---
+    // --- MOTION DETECTION ---
     // If any axis exceeds threshold, turn LED on
     if (abs(ax) > motionThreshold3 || abs(ay) > motionThreshold3 || abs(az) > motionThreshold3) {
-      digitalWrite(ledPin3, HIGH);  // Motion detected
+     blink3 = false;  // digitalWrite(ledPin3, HIGH);  // Motion detected
     }
+    if (blink == true) {
+      digitalWrite(ledPin, LOW);
+      delay(30);
 
-    //  if (abs(ax) < - motionThreshold || abs(ay) < - motionThreshold || abs(az) < - motionThreshold) {
-    //       digitalWrite(ledPin, HIGH); // Motion detected
-    // }
-    delay(50);  // small delay for stability
+      digitalWrite(ledPin, HIGH);
+    }
+    if (blink2 == true) {
+      digitalWrite(ledPin2, LOW);
+      delay(30);
+
+      digitalWrite(ledPin2, HIGH);
+    }
+    if (blink3 == true) {
+      digitalWrite(ledPin3, LOW);
+      delay(30);
+
+      digitalWrite(ledPin3, HIGH);
+    }
   }
 }
