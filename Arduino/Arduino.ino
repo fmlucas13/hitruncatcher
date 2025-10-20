@@ -10,8 +10,14 @@
 #include "MPU6050_6Axis_MotionApps20.h"
 
 // --- LED SETUP ---
-const int ledPin = 13;       // LED connected to digital pin 13
-const float motionThreshold = 3.0;  // Motion sensitivity threshold (adjustable)
+const int ledPin = 13;              // LED connected to digital pin 13
+const float motionThreshold = 1.0;  // Motion sensitivity threshold (adjustable)
+// --- LED SETUP ---
+const int ledPin2 = 12;              // LED connected to digital pin 12
+const float motionThreshold2 = 2.0;  // Motion sensitivity threshold (adjustable)
+// --- LED SETUP ---
+const int ledPin3 = 11;              // LED connected to digital pin 11
+const float motionThreshold3 = 3.0;  // Motion sensitivity threshold (adjustable)
 
 // --- MPU6050 SETUP ---
 MPU6050 mpu;
@@ -23,14 +29,14 @@ uint8_t FIFOBuffer[64];
 
 // --- MPU6050 VARIABLES ---
 Quaternion q;
-VectorInt16 aa;         // Raw acceleration
-VectorInt16 aaWorld;    // Gravity-compensated and rotated acceleration
+VectorInt16 aa;       // Raw acceleration
+VectorInt16 aaWorld;  // Gravity-compensated and rotated acceleration
 VectorFloat gravity;
-float ypr[3];           // Not used here, but for future orientation
+float ypr[3];  // Not used here, but for future orientation
 
 void setup() {
   Wire.begin();
-  Wire.setClock(400000); // 400kHz I2C speed
+  Wire.setClock(400000);  // 400kHz I2C speed
 
   Serial.begin(115200);
   Serial.println(F("Initializing I2C devices..."));
@@ -39,7 +45,8 @@ void setup() {
   Serial.println(F("Testing MPU6050 connection..."));
   if (!mpu.testConnection()) {
     Serial.println("MPU6050 connection failed!");
-    while (1);
+    while (1)
+      ;
   } else {
     Serial.println("MPU6050 connection successful!");
   }
@@ -71,7 +78,7 @@ void setup() {
 
   // LED pin setup
   pinMode(ledPin, OUTPUT);
-      digitalWrite(ledPin, LOW); 
+  digitalWrite(ledPin, LOW);
 }
 
 void loop() {
@@ -86,22 +93,36 @@ void loop() {
     // Convert raw acceleration to g's (gravity units)
     float ax = aaWorld.x * mpu.get_acce_resolution();
     float ay = aaWorld.y * mpu.get_acce_resolution();
-    float az = aaWorld.z * mpu.get_acce_resolution() - 1.0; // Remove gravity from z
+    float az = aaWorld.z * mpu.get_acce_resolution() - 1.0;  // Remove gravity from z
 
     // Print acceleration for debugging
-    Serial.print("ax: "); Serial.print(ax);
-    Serial.print("\tay: "); Serial.print(ay);
-    Serial.print("\taz: "); Serial.println(az);
+    Serial.print("ax: ");
+    Serial.print(ax);
+    Serial.print("\tay: ");
+    Serial.print(ay);
+    Serial.print("\taz: ");
+    Serial.println(az);
 
 
     // --- MOTION DETECTION ---
     // If any axis exceeds threshold, turn LED on
     if (abs(ax) > motionThreshold || abs(ay) > motionThreshold || abs(az) > motionThreshold) {
-      digitalWrite(ledPin, HIGH); // Motion detected
-}
-//  if (abs(ax) < - motionThreshold || abs(ay) < - motionThreshold || abs(az) < - motionThreshold) {
-//       digitalWrite(ledPin, HIGH); // Motion detected
-// }
-    delay(200); // small delay for stability
+      digitalWrite(ledPin, HIGH);  // Motion detected
+    }
+    // --- MOTION DETECTION ---
+    // If any axis exceeds threshold, turn LED on
+    if (abs(ax) > motionThreshold2 || abs(ay) > motionThreshold2 || abs(az) > motionThreshold2) {
+      digitalWrite(ledPin2, HIGH);  // Motion detected
+    }
+        // --- MOTION DETECTION ---
+    // If any axis exceeds threshold, turn LED on
+    if (abs(ax) > motionThreshold3 || abs(ay) > motionThreshold3 || abs(az) > motionThreshold3) {
+      digitalWrite(ledPin3, HIGH);  // Motion detected
+    }
+
+    //  if (abs(ax) < - motionThreshold || abs(ay) < - motionThreshold || abs(az) < - motionThreshold) {
+    //       digitalWrite(ledPin, HIGH); // Motion detected
+    // }
+    delay(50);  // small delay for stability
   }
 }
