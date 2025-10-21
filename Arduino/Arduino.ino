@@ -8,7 +8,11 @@
 
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
+#include <Servo.h>  // Include the Servo library
 
+Servo myServo;  // Create a servo object
+
+int servoPin = 9;  // You can use any PWM pin on the Mega (like 9, 10, 11, etc.)
 // --- LED SETUP ---
 const int ledPin = 13;  // LED connected to digital pin 13
 const float motionThreshold = 1.0;
@@ -85,9 +89,16 @@ void setup() {
   pinMode(ledPin, OUTPUT);
   pinMode(ledPin2, OUTPUT);
   pinMode(ledPin3, OUTPUT);
+
+  myServo.attach(servoPin);  // Connect servo signal wire to pin 9
+
+  myServo.write(0);
 }
 
+
+
 void loop() {
+ 
 
   if (!DMPReady) return;
 
@@ -110,21 +121,23 @@ void loop() {
     Serial.print("\taz: ");
     Serial.println(az);
 
-
     // --- MOTION DETECTION ---
     // If any axis exceeds threshold, turn LED on
     if (abs(ax) > motionThreshold || abs(ay) > motionThreshold || abs(az) > motionThreshold) {
-      blink = false;  // digitalWrite(ledPin, HIGH);  // Motion detected
+      blink = false;
+      myServo.write(180);
     }
     // --- MOTION DETECTION ---
     // If any axis exceeds threshold, turn LED on
     if (abs(ax) > motionThreshold2 || abs(ay) > motionThreshold2 || abs(az) > motionThreshold2) {
-     blink2 = false;  // digitalWrite(ledPin2, HIGH);  // Motion detected
+      blink2 = false;
+      myServo.write(180);  // digitalWrite(ledPin2, HIGH);  // Motion detected
     }
     // --- MOTION DETECTION ---
     // If any axis exceeds threshold, turn LED on
     if (abs(ax) > motionThreshold3 || abs(ay) > motionThreshold3 || abs(az) > motionThreshold3) {
-     blink3 = false;  // digitalWrite(ledPin3, HIGH);  // Motion detected
+      blink3 = false;
+      myServo.write(180);  // digitalWrite(ledPin3, HIGH);  // Motion detected
     }
     if (blink == true) {
       digitalWrite(ledPin, LOW);
