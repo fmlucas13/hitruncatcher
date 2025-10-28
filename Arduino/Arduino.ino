@@ -121,397 +121,57 @@ void loop() {
     Serial.print("\taz: ");
     Serial.println(az);
 
+
     // --- MOTION DETECTION ---
     // If any axis exceeds threshold, turn LED on
     if (abs(ax) > motionThreshold || abs(ay) > motionThreshold || abs(az) > motionThreshold) {
       blink = false;
-      if (blink == false) {
-        myServo.write(-30);
+      while (blink == false) {
+        myServo.write(30);
+        delay(500);
+        myServo.write(0);
+        delay(500);
       }
     }
     // --- MOTION DETECTION ---
     // If any axis exceeds threshold, turn LED on
     if (abs(ax) > motionThreshold2 || abs(ay) > motionThreshold2 || abs(az) > motionThreshold2) {
       blink2 = false;
-      if (blink == false) {
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
-        myServo.write(180);
-        delay(500);
-        myServo.write(90);
-        delay(500);
+      while (blink2 == false) {
         myServo.write(180);
         delay(500);
         myServo.write(90);
         delay(500);
       }
-      // --- MOTION DETECTION ---
-      // If any axis exceeds threshold, turn LED on
-      if (abs(ax) > motionThreshold3 || abs(ay) > motionThreshold3 || abs(az) > motionThreshold3) {
-        blink3 = false;
-        if (blink == false) {
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-          myServo.write(180);
-          delay(500);
-          myServo.write(90);
-          delay(500);
-        }
-        if (blink == true) {
-          digitalWrite(ledPin, LOW);
-          delay(30);
-
-          digitalWrite(ledPin, HIGH);
-        }
-        if (blink2 == true) {
-          digitalWrite(ledPin2, LOW);
-          delay(30);
-
-          digitalWrite(ledPin2, HIGH);
-        }
-        if (blink3 == true) {
-          digitalWrite(ledPin3, LOW);
-          delay(30);
-
-          digitalWrite(ledPin3, HIGH);
-        }
+    }
+    // --- MOTION DETECTION ---
+    // If any axis exceeds threshold, turn LED on
+    if (abs(ax) > motionThreshold3 || abs(ay) > motionThreshold3 || abs(az) > motionThreshold3) {
+      blink3 = false;
+      while (blink3 == false) {
+        myServo.write(180);
+        delay(500);
+        myServo.write(90);
+        delay(500);
       }
+    }
+    if (blink == true) {
+      digitalWrite(ledPin, LOW);
+      delay(30);
+
+      digitalWrite(ledPin, HIGH);
+    }
+    if (blink2 == true) {
+      digitalWrite(ledPin2, LOW);
+      delay(30);
+
+      digitalWrite(ledPin2, HIGH);
+    }
+    if (blink3 == true) {
+      digitalWrite(ledPin3, LOW);
+      delay(30);
+
+      digitalWrite(ledPin3, HIGH);
     }
   }
 }
