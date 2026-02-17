@@ -7,7 +7,7 @@ Servo myServo;  // Create a servo object
 int servoPin = 9;  // You can use any PWM pin on the Mega (like 9, 10, 11, etc.)
 // --- LED SETUP ---
 const int ledPin = 13;  // LED connected to digital pin 13
-const float motionThreshold = 0.9;
+const float motionThreshold = 1.5;
 
 bool blink = true;
 // --- MPU6050 SETUP ---
@@ -92,7 +92,7 @@ void loop() {
     float ay = aaWorld.y * mpu.get_acce_resolution();
     float az = aaWorld.z * mpu.get_acce_resolution() - 1.0;  // remove gravity from z
 
-    // Print acceleration for debugging
+   // Print acceleration for debugging
     Serial.print("ax: ");
     Serial.print(ax);
     Serial.print("\tay: ");
