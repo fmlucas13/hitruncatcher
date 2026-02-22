@@ -2,12 +2,15 @@
 #include "MPU6050_6Axis_MotionApps20.h"
 #include <Servo.h>  // Include the Servo library
 
+float x, y, z;
+float g;
+
 Servo myServo;  // Create a servo object
 
 int servoPin = 9;  // You can use any PWM pin on the Mega (like 9, 10, 11, etc.)
 // --- LED SETUP ---
 const int ledPin = 13;  // LED connected to digital pin 13
-const float motionThreshold = 1.5;
+const float motionThreshold = 2.01;
 
 bool blink = true;
 // --- MPU6050 SETUP ---
@@ -29,9 +32,20 @@ void setup() {
   Wire.begin();
   Wire.setClock(400000);  // 400kHz I2C speed
 
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println(F("Initializing I2C devices..."));
   mpu.initialize();
+
+  // Example values
+  float x = 3.0;
+  float y = 4.0;
+  float z = 5.0;
+
+  // Calculation: g = √(x² + y² + z²)
+  float g = sqrt(x * x + y * y + z * z);
+
+
+
 
   Serial.println(F("Testing MPU6050 connection..."));
   if (!mpu.testConnection()) {
@@ -92,14 +106,16 @@ void loop() {
     float ay = aaWorld.y * mpu.get_acce_resolution();
     float az = aaWorld.z * mpu.get_acce_resolution() - 1.0;  // remove gravity from z
 
-   // Print acceleration for debugging
-    Serial.print("ax: ");
-    Serial.print(ax);
-    Serial.print("\tay: ");
-    Serial.print(ay);
-    Serial.print("\taz: ");
-    Serial.println(az);
+    // Print acceleration for debugging
+    // Serial.print("ax: ");
+    // Serial.print(ax);
+    // Serial.print("\tay: ");
+    // Serial.print(ay);
+    // Serial.print("\taz: ");
+    // Serial.println(az);
 
+    Serial.print("Result g: ");
+    Serial.println(g);  // Output: 7.07
 
     // --- MOTION DETECTION ---
     // If any axis exceeds threshold, turn LED on
