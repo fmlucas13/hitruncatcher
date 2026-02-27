@@ -1,134 +1,92 @@
-#include "I2Cdev.h"
-#include "MPU6050_6Axis_MotionApps20.h"
-#include <Servo.h>  // Include the Servo library
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
+#include <Servo.h>
+Adafruit_MPU6050 mpu;
+#define LED_PIN 13
+#define SERVO_PIN 12
 
-float x, y, z;
-float g;
+Servo myServo;
 
-Servo myServo;  // Create a servo object
+bool triggered = false;
+const float motionthershold = 2.0;
+void setup(void) {
+  Serial.begin(115200);
+  while (!Serial)
+    delay(10);  // will pause Zero, Leonardo, etc until serial console opens
 
-int servoPin = 9;  // You can use any PWM pin on the Mega (like 9, 10, 11, etc.)
-// --- LED SETUP ---
-const int ledPin = 13;  // LED connected to digital pin 13
-const float motionThreshold = 2.01;
+  Serial.println("Adafruit MPU6050 test!");
 
-bool blink = true;
-// --- MPU6050 SETUP ---
-MPU6050 mpu;
-bool DMPReady = false;  // Flag for DMP initialization
-uint8_t MPUIntStatus;
-uint8_t devStatus;
-uint16_t packetSize;
-uint8_t FIFOBuffer[64];
-
-// --- MPU6050 VARIABLES ---
-Quaternion q;
-VectorInt16 aa;       // Raw acceleration
-VectorInt16 aaWorld;  // Gravity-compensated and rotated acceleration
-VectorFloat gravity;
-float ypr[3];  // Not used here, but for future orientation
-
-void setup() {
-  Wire.begin();
-  Wire.setClock(400000);  // 400kHz I2C speed
-
-  Serial.begin(9600);
-  Serial.println(F("Initializing I2C devices..."));
-  mpu.initialize();
-
-  // Example values
-  float x = 3.0;
-  float y = 4.0;
-  float z = 5.0;
-
-  // Calculation: g = √(x² + y² + z²)
-  float g = sqrt(x * x + y * y + z * z);
-
-
-
-
-  Serial.println(F("Testing MPU6050 connection..."));
-  if (!mpu.testConnection()) {
-    Serial.println("MPU6050 connection failed!");
-    while (1)
-      ;
-  } else {
-    Serial.println("MPU6050 connection successful!");
-  }
-
-  // DMP Initialization
-  Serial.println(F("Initializing DMP..."));
-  devStatus = mpu.dmpInitialize();
-  Serial.println(F("Test..."));
-  mpu.setXGyroOffset(0);
-  mpu.setYGyroOffset(0);
-  mpu.setZGyroOffset(0);
-  mpu.setXAccelOffset(0);
-  mpu.setYAccelOffset(0);
-  mpu.setZAccelOffset(0);
-
-  if (devStatus == 0) {
-    mpu.CalibrateAccel();
-    mpu.CalibrateGyro();
-    Serial.println("Active offsets:");
-    mpu.PrintActiveOffsets();
-
-    mpu.setDMPEnabled(true);
-    MPUIntStatus = mpu.getIntStatus();
-    DMPReady = true;
-    packetSize = mpu.dmpGetFIFOPacketSize();
-    Serial.println(F("DMP ready!"));
-  }
-
-  // LED pin setup
-  pinMode(ledPin, OUTPUT);
-
-  myServo.attach(servoPin);  // Connect servo signal wire to pin 9
-
-  myServo.write(30);
-}
-
-
-
-void loop() {
-
-
-  if (!DMPReady) return;
-
-  if (mpu.dmpGetCurrentFIFOPacket(FIFOBuffer)) {
-    // get gravity-compensated acceleration
-    mpu.dmpGetGravity(&gravity, &q);
-    mpu.dmpGetAccel(&aa, FIFOBuffer);
-    mpu.dmpConvertToWorldFrame(&aaWorld, &aa, &q);
-
-    // Convert raw acceleration to g's (gravity units)
-    float ax = aaWorld.x * mpu.get_acce_resolution();
-    float ay = aaWorld.y * mpu.get_acce_resolution();
-    float az = aaWorld.z * mpu.get_acce_resolution() - 1.0;  // remove gravity from z
-
-    // Print acceleration for debugging
-    // Serial.print("ax: ");
-    // Serial.print(ax);
-    // Serial.print("\tay: ");
-    // Serial.print(ay);
-    // Serial.print("\taz: ");
-    // Serial.println(az);
-
-    Serial.print("Result g: ");
-    Serial.println(g);  // Output: 7.07
-
-    // --- MOTION DETECTION ---
-    // If any axis exceeds threshold, turn LED on
-    if (abs(ax) > motionThreshold || abs(ay) > motionThreshold || abs(az) > motionThreshold) {
-      blink = false;
-      if (blink == false) {
-        myServo.write(180);
-      }
+  // Try to initialize!
+  if (!mpu.begin()) {
+    Serial.println("Failed to find MPU6050 chip");
+    while (1) {
+      delay(10);
     }
   }
-  if (blink == true) {
-    digitalWrite(ledPin, LOW);
-    delay(30);
-    digitalWrite(ledPin, HIGH);
+  Serial.println("MPU6050 Found!");
+  pinMode(LED_PIN, OUTPUT);
+  myServo.attach(SERVO_PIN);
+  myServo.write(0); 
+  //setupt motion detection
+  mpu.setHighPassFilter(MPU6050_HIGHPASS_0_63_HZ);
+  mpu.setMotionDetectionThreshold(1);
+  mpu.setMotionDetectionDuration(20);
+  mpu.setInterruptPinLatch(true);  // Keep it latched.  Will turn off when reinitialized.
+  mpu.setInterruptPinPolarity(true);
+  mpu.setMotionInterrupt(true);
+
+  Serial.println("");
+  delay(100);
+}
+
+void loop() {
+  /* Get new sensor events with the readings */
+  sensors_event_t a, g, temp;
+  mpu.getEvent(&a, &g, &temp);
+
+  /* Print out the values */
+  Serial.print("AccelX:");
+  Serial.print(a.acceleration.x);
+  Serial.print(",");
+  Serial.print("\t\tAccelY:");
+  Serial.print(a.acceleration.y);
+  Serial.print(",");
+  Serial.print("\t\tAccelZ:");
+  Serial.print(a.acceleration.z);
+  Serial.print(", ");
+  Serial.print("\t\tGyroX:");
+  Serial.print(g.gyro.x);
+  Serial.print(",");
+  Serial.print("\t\tGyroY:");
+  Serial.print(g.gyro.y);
+  Serial.print(",");
+  Serial.print("\t\tGyroZ:");
+  Serial.print(g.gyro.z);
+
+
+  float x = a.acceleration.x;
+  float y = a.acceleration.y;
+  float z = a.acceleration.z;
+
+  // Calculate total g
+  float tg = (sqrt(x * x + y * y + z * z) - 9.81) / 9.81;
+  Serial.print("\t\tTotal Gs: ");
+  Serial.print(tg);
+  Serial.println("");
+
+  if (tg > motionthershold) {
+    if (!triggered) {
+      triggered = true;
+      myServo.write(180);
+      digitalWrite(LED_PIN, HIGH);  // Solid LED
+    }
+  } else {
+    if (!triggered) {
+      digitalWrite(LED_PIN, HIGH);
+      delay(50);
+      digitalWrite(LED_PIN, LOW);
+      delay(50);
+    }
   }
 }
